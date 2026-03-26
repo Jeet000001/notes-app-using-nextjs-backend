@@ -29,7 +29,7 @@ export const GET = async (params) => {
 };
 
 // Post End point
-export const POST = async (params) => {
+export const POST = async (request) => {
   try {
     await dbconnect();
     const body = await request.json();
