@@ -19,6 +19,7 @@ const NoteForm = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, content }),
+        // title, content are javascript object and json.stringify conver the object into string
       });
 
       const result = await response.json();
