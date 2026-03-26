@@ -1,11 +1,13 @@
-import dbconnect from '@/lib/db'
-import React from 'react'
+import dbconnect from "@/lib/db";
+import React from "react";
 
 const page = async () => {
-  await dbconnect()
+  await dbconnect();
   return (
-    <div>page</div>
-  )
-}
+    <div className="min-h-screen">
+      <h1 className="text-center text-4xl font-extrabold font-serif py-5">Noes App</h1>
+    </div>
+  );
+};
 
-export default page
+export default page;
