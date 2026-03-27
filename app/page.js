@@ -4,11 +4,8 @@ import NoteForm from "./components/NoteForm";
 
 import NotesDisplay from "./components/NotesDisplay";
 
-
 const page = async () => {
   await dbconnect();
-
-
   return (
     <div className="min-h-screen">
       <h1 className="text-center text-4xl font-extrabold font-serif py-5">
