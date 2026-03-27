@@ -11,10 +11,11 @@ export const GET = async () => {
     // find({}) = No filter get all teh Data & .sort({ createdAt: -1 }) = short the notes base on create time ans descending order (newest first)
 
     return NextResponse.json(
-      notes.map((note) => ({
-        ...note.toObject(),
-        id: note._id.toString(),
-      })),
+      {
+        success: true,
+        data: notes,
+      },
+      { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(

@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 
-const NoteForm = () => {
+const NoteForm = ({ savedNotes }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [notes, setNotes] = useState(savedNotes)
 
   const createNote = async (e) => {
     e.preventDefault();
@@ -23,7 +24,11 @@ const NoteForm = () => {
       });
 
       const result = await response.json();
-      console.log(result);
+      if(result.success){
+        setNotes([result.data, ...notes])
+        setTitle("")
+        setContent("")
+      }
 
       if (response.ok) {
         setTitle("");
@@ -37,8 +42,8 @@ const NoteForm = () => {
   };
 
   return (
-    <div className="">
-      <div className="w-full max-w-md bg-white/90 backdrop-blur-lg shadow-2xl rounded-2xl p-6">
+    <div >
+      <div className="w-full max-w-md p-6">
         <h1 className="text-2xl font-bold text-gray-800 text-center mb-6">
           Create Note
         </h1>
@@ -67,6 +72,47 @@ const NoteForm = () => {
           </button>
         </form>
       </div>
+      <div className="max-w-5xl mx-auto px-4 pb-8">
+
+            <h1 className="text-4xl font-bold text-center mb-10 tracking-tight">
+                Notes Dashboard
+            </h1>
+
+            {notes.length === 0 ? (
+                <p className="text-center text-gray-500 text-lg">
+                    No notes found. Start adding some ✍️
+                </p>
+            ) : (
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    {notes.map((note) => (
+                        <div
+                            key={note.id}
+                            className="group bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-xl transition-all duration-300"
+                        >
+                            <h2 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-1">
+                                {note.title}
+                            </h2>
+
+                            <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                                {note.content}
+                            </p>
+
+                            <div className="flex justify-between items-center">
+                                <button className="text-sm px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition">
+                                    ✏️ Edit
+                                </button>
+
+                                <button className="text-sm px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600 transition">
+                                    🗑 Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+
+                </div>
+            )}
+        </div>
     </div>
   );
 };
