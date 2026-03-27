@@ -48,20 +48,20 @@ const NoteForm = ({ savedNotes }) => {
     }
   }
 
-  const updateNote = async(id) => {
-    if(!title.trim() || !content.trim()) return;
+  const updateNote = async (id) => {
+    if (!title.trim() || !content.trim()) return;
     setLoading(true)
 
     try {
       const request = await fetch(`/api/notes/${id}`, {
         method: "PUT",
-        headers: {"Content-type": "application/json"},
-        body: JSON.stringify({title: title, content: content})
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ title: title, content: content })
       })
 
       const result = await response.jso()
 
-      if(result.success){
+      if (result.success) {
         setNotes(notes.map((note) => (note._id === id ? result.data : note)))
         setEdintingId(null)
         setTitle("")
@@ -115,12 +115,26 @@ const NoteForm = ({ savedNotes }) => {
             className="w-full flex-1 min-h-[120px] px-3 py-2 border-[1.5px] border-[#ddd4c8] rounded-xl bg-white text-[#2b2218] text-sm outline-none mb-5 resize-none focus:border-[#c9a96e] focus:ring-3 focus:ring-[#c9a96e]/20 transition"
           />
           <button
-            onClick={createNote}
+            onClick={(e) => {
+              if (edintingId) {
+                updateNote(edintingId);
+              } else {
+                createNote(e);
+              }
+            }}
             disabled={loading || !title.trim() || !content.trim()}
             className="w-full py-3 bg-[#2b2218] text-[#f5f0eb] font-semibold text-sm rounded-xl cursor-pointer transition hover:bg-[#3d3020] active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? "Saving..." : "+ Create Note"}
+            {loading ? "Saving..." : edintingId ? "Update Note" : "+ Create Note"}
           </button>
+          {edintingId && (
+            <button
+              onClick={canclelEdit}
+              className="mt-2 w-full py-2 bg-gray-300 text-black rounded-xl"
+            >
+              Cancel Edit
+            </button>
+          )}
         </div>
 
         {/* Notes panel */}
