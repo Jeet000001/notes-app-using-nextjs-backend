@@ -84,9 +84,15 @@ const NoteForm = ({ savedNotes }) => {
             ) : (
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
                 {notes.map((note) => (
-                  <div key={note.id} className="bg-white border-[1.5px] border-[#e8e0d6] rounded-2xl p-4 flex flex-col gap-2 relative overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-transform duration-200">
+                  <div key={note._id} className="bg-white border-[1.5px] border-[#e8e0d6] rounded-2xl p-4 flex flex-col gap-2 relative overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-transform duration-200">
                     <div className="font-serif font-semibold text-[#2b2218] text-base truncate">{note.title}</div>
                     <div className="text-sm text-[#7a6e64] line-clamp-3 flex-1">{note.content}</div>
+                    <div className="flex flex-col gap-1 mt-2 text-xs text-gray-500">
+                      <p>Created: {new Date(note.createdAt).toLocaleDateString()}</p>
+                      {note.updatedAt !== note.createdAt && (
+                        <p>Updated: {new Date(note.updatedAt).toLocaleDateString()}</p>
+                      )}
+                    </div>
                     <div className="flex gap-2 mt-1">
                       <button className="flex-1 py-1 bg-[#eef4ff] text-[#3b6fd4] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Edit</button>
                       <button className="flex-1 py-1 bg-[#fff0f0] text-[#d94f4f] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Delete</button>
