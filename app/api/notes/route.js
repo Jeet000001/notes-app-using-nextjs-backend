@@ -2,7 +2,7 @@ import dbconnect from "@/lib/db";
 import Notes from "@/models/notes";
 import { NextResponse } from "next/server";
 
-export const GET = async (params) => {
+export const GET = async () => {
   try {
     await dbconnect();
     const notes = await Notes.find({}).sort({
@@ -11,11 +11,10 @@ export const GET = async (params) => {
     // find({}) = No filter get all teh Data & .sort({ createdAt: -1 }) = short the notes base on create time ans descending order (newest first)
 
     return NextResponse.json(
-      {
-        success: true,
-        data: notes,
-      },
-      { status: 200 },
+      notes.map((note) => ({
+        ...note.toObject(),
+        id: note._id.toString(),
+      })),
     );
   } catch (error) {
     return NextResponse.json(
