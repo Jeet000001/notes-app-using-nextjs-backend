@@ -31,6 +31,22 @@ const NoteForm = ({ savedNotes }) => {
     }
   };
 
+  const deleteNote = async (id) => {
+    try {
+      const response = await fetch(`/api/notes/${id}`, {
+        method: "DELETE"
+      })
+
+      const result = await response.json();
+
+      if (result.success) {
+        setNotes(notes.filter((note) => note._id.toString() !== id))
+      }
+    } catch (error) {
+      console.error("Error in deleting note")
+    }
+  }
+
   return (
     <div className="flex flex-col h-screen w-full bg-[#f5f0eb] font-sans overflow-hidden">
       {/* Top bar */}
@@ -95,7 +111,7 @@ const NoteForm = ({ savedNotes }) => {
                     </div>
                     <div className="flex gap-2 mt-1">
                       <button className="flex-1 py-1 bg-[#eef4ff] text-[#3b6fd4] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Edit</button>
-                      <button className="flex-1 py-1 bg-[#fff0f0] text-[#d94f4f] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Delete</button>
+                      <button onClick={() => deleteNote(note._id)} className="flex-1 py-1 bg-[#fff0f0] text-[#d94f4f] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Delete</button>
                     </div>
                   </div>
                 ))}
