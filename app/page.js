@@ -3,16 +3,17 @@ import React from "react";
 import NoteForm from "./components/Notes";
 import Notes from "@/models/notes";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic"; // ensures SSR refresh on every request
 
 const getNotes = async () => {
   await dbconnect();
   const notes = await Notes.find({}).sort({ createdAt: -1 }).lean();
 
-  return notes.map((note) => ({
-    ...note,
-    _id: undefined,
-    id: note._id.toString(),
+  return notes.map(({ _id, title, content, createdAt }) => ({
+    id: _id.toString(),
+    title: title || "",
+    content: content || "",
+    createdAt: createdAt?.toISOString() || new Date().toISOString(),
   }));
 };
 
