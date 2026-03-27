@@ -23,6 +23,7 @@ export const PUT = async (req, { params }) => {
         { status: 404 },
       );
     }
+    return NextResponse.json({ success: true, data: note });
   } catch (error) {
     return NextResponse.jsomm(
       {
@@ -40,7 +41,7 @@ export const DELETE = async (req, { params }) => {
     await dbconnect();
     const note = await notes.findByIdAndDelete(id);
 
-    if (!notes) {
+    if (!note) {
       return NextResponse.json(
         {
           success: false,
