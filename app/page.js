@@ -4,7 +4,6 @@ import React from "react";
 import NoteForm from "./components/Notes";
 import Notes from "@/models/notes";
 
-export const dynamic = "force-dynamic"; // ensures SSR refresh on every request
 
 const getNotes = async () => {
   await dbconnect();
