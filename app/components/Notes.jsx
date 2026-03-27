@@ -7,6 +7,7 @@ const NoteForm = ({ savedNotes }) => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState(Array.isArray(savedNotes) ? savedNotes : []);
+  const [edintingId, setEdintingId] = useState(null);
 
   const createNote = async (e) => {
     e.preventDefault();
@@ -45,6 +46,44 @@ const NoteForm = ({ savedNotes }) => {
     } catch (error) {
       console.error("Error in deleting note")
     }
+  }
+
+  const updateNote = async(id) => {
+    if(!title.trim() || !content.trim()) return;
+    setLoading(true)
+
+    try {
+      const request = await fetch(`/api/notes/${id}`, {
+        method: "PUT",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({title: title, content: content})
+      })
+
+      const result = await response.jso()
+
+      if(result.success){
+        setNotes(notes.map((note) => (note._id === id ? result.data : note)))
+        setEdintingId(null)
+        setTitle("")
+        setContent("")
+      }
+
+      setLoading(false)
+    } catch (error) {
+      console.error("Error in updating the note", error)
+    }
+  }
+
+  const startEdit = (note) => {
+    setEdintingId(note._id);
+    setTitle(note.title)
+    setContent(note.content)
+  }
+
+  const canclelEdit = (note) => {
+    setEdintingId(null);
+    setTitle("")
+    setContent("")
   }
 
   return (
@@ -110,7 +149,7 @@ const NoteForm = ({ savedNotes }) => {
                       )}
                     </div>
                     <div className="flex gap-2 mt-1">
-                      <button className="flex-1 py-1 bg-[#eef4ff] text-[#3b6fd4] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Edit</button>
+                      <button onClick={() => startEdit(note)} className="flex-1 py-1 bg-[#eef4ff] text-[#3b6fd4] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Edit</button>
                       <button onClick={() => deleteNote(note._id)} className="flex-1 py-1 bg-[#fff0f0] text-[#d94f4f] font-semibold text-xs rounded-lg active:scale-95 hover:opacity-80">Delete</button>
                     </div>
                   </div>
